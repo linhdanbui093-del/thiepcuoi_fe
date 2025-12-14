@@ -33,10 +33,17 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (selectedWedding) {
-      reset(selectedWedding)
+      // Convert weddingDate to format compatible with datetime-local input
+      const formData = {
+        ...selectedWedding,
+        weddingDate: selectedWedding.weddingDate
+          ? new Date(selectedWedding.weddingDate).toISOString().slice(0, 16)
+          : ''
+      }
+      reset(formData)
       fetchImages()
     }
-  }, [selectedWedding])
+  }, [selectedWedding, reset])
 
   const fetchWeddings = async () => {
     try {
@@ -245,6 +252,50 @@ export default function AdminPage() {
                       rows={6}
                       className="w-full px-4 py-2 border rounded-lg"
                     />
+                  </div>
+                </div>
+
+                <div className="border-t pt-6 mt-6">
+                  <h3 className="text-lg font-bold mb-4">Thông tin bố mẹ</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-pink-600">Gia đình chú rể</h4>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2">Bố chú rể</label>
+                        <input
+                          {...register('parents.groom.father')}
+                          className="w-full px-4 py-2 border rounded-lg"
+                          placeholder="Họ và tên bố chú rể"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2">Mẹ chú rể</label>
+                        <input
+                          {...register('parents.groom.mother')}
+                          className="w-full px-4 py-2 border rounded-lg"
+                          placeholder="Họ và tên mẹ chú rể"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-rose-600">Gia đình cô dâu</h4>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2">Bố cô dâu</label>
+                        <input
+                          {...register('parents.bride.father')}
+                          className="w-full px-4 py-2 border rounded-lg"
+                          placeholder="Họ và tên bố cô dâu"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2">Mẹ cô dâu</label>
+                        <input
+                          {...register('parents.bride.mother')}
+                          className="w-full px-4 py-2 border rounded-lg"
+                          placeholder="Họ và tên mẹ cô dâu"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
