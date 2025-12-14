@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
 interface WeddingForm {
   slug: string
@@ -288,7 +288,7 @@ export default function AdminPage() {
                     .map((image) => (
                       <div key={image._id} className="relative group">
                         <img
-                          src={`http://localhost:5000${image.path}`}
+                          src={`https://api.ocuadua.com${image.path}`}
                           alt={image.originalName}
                           className="w-full h-48 object-cover rounded-lg"
                         />
@@ -359,7 +359,7 @@ export default function AdminPage() {
                             {images.filter(img => img.category === 'qr-groom').map((img) => (
                               <div key={img._id} className="relative inline-block mr-2">
                                 <img
-                                  src={`http://localhost:5000${img.path}`}
+                                  src={`https://api.ocuadua.com${img.path}`}
                                   alt="QR Code"
                                   className="w-24 h-24 object-contain border rounded"
                                 />
@@ -408,7 +408,7 @@ export default function AdminPage() {
                             {images.filter(img => img.category === 'qr-bride').map((img) => (
                               <div key={img._id} className="relative inline-block mr-2">
                                 <img
-                                  src={`http://localhost:5000${img.path}`}
+                                  src={`https://api.ocuadua.com${img.path}`}
                                   alt="QR Code"
                                   className="w-24 h-24 object-contain border rounded"
                                 />
@@ -605,7 +605,7 @@ function StoryManager({ register, watch, setValue, selectedWedding, handleImageU
             {storyItem?.image ? (
               <div className="relative inline-block">
                 <img
-                  src={storyItem.image.startsWith('http') ? storyItem.image : `http://localhost:5000${storyItem.image}`}
+                  src={storyItem.image.startsWith('http') ? storyItem.image : `https://api.ocuadua.com${storyItem.image}`}
                   alt="Story"
                   className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-pink-200"
                 />

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
 interface AboutCoupleProps {
   wedding: {
@@ -86,7 +86,7 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                   <img
-                    src={`http://localhost:5000${groomImage}`}
+                    src={`https://api.ocuadua.com${groomImage}`}
                     alt={wedding.groomName}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
                   />
@@ -119,7 +119,7 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                   <img
-                    src={`http://localhost:5000${brideImage}`}
+                    src={`https://api.ocuadua.com${brideImage}`}
                     alt={wedding.brideName}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
                   />

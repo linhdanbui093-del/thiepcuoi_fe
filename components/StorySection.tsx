@@ -53,7 +53,7 @@ export default function StorySection({ story }: StorySectionProps) {
                   <div className={`${index % 2 === 1 ? 'md:order-2' : ''}`}>
                     <div className="relative group overflow-hidden rounded-2xl shadow-2xl">
                       <img
-                        src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                        src={item.image.startsWith('http') ? item.image : `https://api.ocuadua.com${item.image}`}
                         alt={item.title}
                         className="w-full h-[400px] md:h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
                       />

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
 interface GiftSectionProps {
   weddingId: string
@@ -130,7 +130,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">
                       <img
-                        src={`http://localhost:5000${groomQR}`}
+                        src={`https://api.ocuadua.com${groomQR}`}
                         alt="QR Code"
                         className="w-48 h-48 object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
                       />
@@ -175,7 +175,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">
                       <img
-                        src={`http://localhost:5000${brideQR}`}
+                        src={`https://api.ocuadua.com${brideQR}`}
                         alt="QR Code"
                         className="w-48 h-48 object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
                       />

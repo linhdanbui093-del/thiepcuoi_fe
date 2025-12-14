@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
 interface PhotoAlbumProps {
   weddingId: string
@@ -82,7 +82,7 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
                 onClick={() => setSelectedImage(image.path)}
               >
                 <img
-                  src={`http://localhost:5000${image.path}`}
+                  src={`https://api.ocuadua.com${image.path}`}
                   alt="Wedding photo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -105,7 +105,7 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
             ×
           </button>
           <img
-            src={`http://localhost:5000${selectedImage}`}
+            src={`https://api.ocuadua.com${selectedImage}`}
             alt="Full size"
             className="max-w-full max-h-full object-contain"
           />
