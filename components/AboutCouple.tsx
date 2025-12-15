@@ -101,7 +101,7 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
                     width={256}
                     height={256}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
-                    unoptimized
+                    quality={85}
                   />
                 </div>
               ) : (
@@ -137,7 +137,7 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
                     width={256}
                     height={256}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
-                    unoptimized
+                    quality={85}
                   />
                 </div>
               ) : (

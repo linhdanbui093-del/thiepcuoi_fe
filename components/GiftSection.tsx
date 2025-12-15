@@ -153,7 +153,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                         width={192}
                         height={192}
                         className="object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
-                        unoptimized
+                        quality={85}
                       />
                     </div>
                   </div>
@@ -211,7 +211,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                         width={192}
                         height={192}
                         className="object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
-                        unoptimized
+                        quality={85}
                       />
                     </div>
                   </div>

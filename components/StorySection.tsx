@@ -68,7 +68,7 @@ export default function StorySection({ story }: StorySectionProps) {
                         height={500}
                         className="w-full h-[400px] md:h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
                         loading={index < 2 ? 'eager' : 'lazy'}
-                        unoptimized
+                        quality={85}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-400 to-rose-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>

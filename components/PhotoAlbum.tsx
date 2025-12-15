@@ -115,7 +115,7 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
                     loading={index < 8 ? 'eager' : 'lazy'}
                     onLoad={() => handleImageLoad(image._id)}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                    unoptimized={imageUrl.includes('api.ocuadua.com')}
+                    quality={85}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
@@ -147,7 +147,7 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
               width={1200}
               height={800}
               className="max-w-full max-h-[90vh] object-contain"
-              unoptimized
+              quality={90}
             />
           </div>
         </div>
