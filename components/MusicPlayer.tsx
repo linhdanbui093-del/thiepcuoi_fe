@@ -19,8 +19,9 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const interactionHandlersRef = useRef<(() => void)[]>([])
   const playTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isPausedByUserRef = useRef(false)
 
-  // Initialize audio
+  // Initialize audio - only when URL or enabled changes
   useEffect(() => {
     if (!wedding.musicUrl || wedding.musicEnabled === false) {
       return
@@ -31,11 +32,16 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
     audioRef.current.volume = volume
     audioRef.current.loop = true
     audioRef.current.preload = 'auto'
-    
+    isPausedByUserRef.current = false
     
     // Function to play audio using audioRef
-    const playAudio = () => {
+    const playAudio = (forcePlay = false) => {
       if (!audioRef.current) {
+        return false
+      }
+      
+      // Check if user has paused (unless forced)
+      if (!forcePlay && isPausedByUserRef.current) {
         return false
       }
       
@@ -63,10 +69,14 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
         clearTimeout(playTimeoutRef.current)
       }
       
+      // Use setTimeout and playAudio with forcePlay=false (respect user pause)
+      // isPausedByUserRef.current should be false on initial load, so auto-play will work
       playTimeoutRef.current = setTimeout(() => {
-        if (!playAudio()) {
+        // Double check that user hasn't paused before timeout fires
+        if (!isPausedByUserRef.current) {
+          playAudio(false) // Auto-play, but respect user pause
         }
-      }, 1000) // 1 second delay
+      }, 1500) // 1.5 second delay
     }
 
     // Try to play when audio is ready
@@ -78,22 +88,25 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
     audioRef.current.addEventListener('canplay', handleReady, { once: true })
     audioRef.current.addEventListener('loadeddata', handleReady, { once: true })
     
+    // Also try on canplaythrough for better reliability
+    audioRef.current.addEventListener('canplaythrough', handleReady, { once: true })
+    
     // If already ready, try immediately
     if (audioRef.current.readyState >= 2) {
       tryAutoPlay()
+    } else {
+      // Even if not ready, set a longer timeout as fallback
+      playTimeoutRef.current = setTimeout(() => {
+        if (audioRef.current && audioRef.current.readyState >= 2 && !isPausedByUserRef.current) {
+          playAudio(false)
+        }
+      }, 2000)
     }
 
-    // Global interaction handler - play on ANY user interaction
+    // Global interaction handler - play on ANY user interaction (only if not paused by user)
     const handleFirstInteraction = () => {
-      if (!isPlaying && audioRef.current) {
-        if (playAudio()) {
-          // Successfully started playing, remove listeners
-          document.removeEventListener('click', handleFirstInteraction, { capture: true })
-          document.removeEventListener('touchstart', handleFirstInteraction, { capture: true })
-          document.removeEventListener('mousedown', handleFirstInteraction, { capture: true })
-          document.removeEventListener('keydown', handleFirstInteraction, { capture: true })
-          document.removeEventListener('scroll', handleFirstInteraction, { capture: true })
-        }
+      if (!isPlaying && !isPausedByUserRef.current && audioRef.current) {
+        playAudio(false)
       }
     }
     
@@ -114,6 +127,7 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
       if (audioRef.current) {
         audioRef.current.removeEventListener('canplay', handleReady)
         audioRef.current.removeEventListener('loadeddata', handleReady)
+        audioRef.current.removeEventListener('canplaythrough', handleReady)
         audioRef.current.pause()
         audioRef.current = null
       }
@@ -124,13 +138,24 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
       document.removeEventListener('keydown', handleFirstInteraction, { capture: true })
       document.removeEventListener('scroll', handleFirstInteraction, { capture: true })
     }
-  }, [wedding.musicUrl, wedding.musicEnabled, volume, isPlaying])
+  }, [wedding.musicUrl, wedding.musicEnabled, volume])
 
+  // Handle play/pause state changes
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch(() => setIsPlaying(false))
-      } else {
+    if (!audioRef.current) return
+    
+    if (isPlaying) {
+      // User wants to play
+      isPausedByUserRef.current = false
+      if (audioRef.current.paused) {
+        audioRef.current.play().catch((err) => {
+          setIsPlaying(false)
+        })
+      }
+    } else {
+      // User wants to pause
+      isPausedByUserRef.current = true
+      if (!audioRef.current.paused) {
         audioRef.current.pause()
       }
     }
@@ -186,7 +211,8 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between gap-3">
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   if (needsInteraction && audioRef.current) {
                     audioRef.current.play()
                       .then(() => {
@@ -197,7 +223,33 @@ export default function MusicPlayer({ wedding }: MusicPlayerProps) {
                         // Still blocked
                       })
                   } else {
-                    setIsPlaying(!isPlaying)
+                    // Toggle play/pause
+                    const newPlayingState = !isPlaying
+                    
+                    // Update ref first to prevent auto-play
+                    if (!newPlayingState) {
+                      isPausedByUserRef.current = true
+                    } else {
+                      isPausedByUserRef.current = false
+                    }
+                    
+                    // Update state
+                    setIsPlaying(newPlayingState)
+                    
+                    // Directly control audio immediately
+                    if (audioRef.current) {
+                      if (newPlayingState) {
+                        // User wants to play - force play (ignore isPausedByUserRef)
+                        isPausedByUserRef.current = false
+                        audioRef.current.play().catch(() => {
+                          setIsPlaying(false)
+                          isPausedByUserRef.current = true
+                        })
+                      } else {
+                        // User wants to pause
+                        audioRef.current.pause()
+                      }
+                    }
                   }
                 }}
                 className="w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
