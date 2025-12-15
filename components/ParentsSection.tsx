@@ -1,5 +1,7 @@
 'use client'
 
+import { Users, Heart, User, UserCheck } from 'lucide-react'
+
 interface ParentsSectionProps {
   parents?: {
     groom?: {
@@ -28,6 +30,9 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
     return null
   }
 
+  const hasGroomParents = !!(groomFather || groomMother)
+  const hasBrideParents = !!(brideFather || brideMother)
+
   return (
     <section className="py-20 bg-gradient-to-b from-white via-pink-50/30 to-white relative overflow-hidden">
       {/* Background pattern */}
@@ -37,34 +42,40 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
       
       {/* Floating family elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-20 text-6xl opacity-5 animate-float" style={{ animationDuration: '9s' }}>👨‍👩‍👦</div>
-        <div className="absolute bottom-1/4 right-20 text-6xl opacity-5 animate-float-slow" style={{ animationDuration: '11s', animationDelay: '1.5s' }}>👨‍👩‍👧</div>
-        <div className="absolute top-1/2 left-1/4 text-5xl opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '2s' }}>💕</div>
+        <div className="absolute top-1/4 left-20 opacity-5 animate-float" style={{ animationDuration: '9s' }}>
+          <Users className="w-16 h-16 text-blue-400" />
+        </div>
+        <div className="absolute bottom-1/4 right-20 opacity-5 animate-float-slow" style={{ animationDuration: '11s', animationDelay: '1.5s' }}>
+          <Users className="w-16 h-16 text-pink-400" />
+        </div>
+        <div className="absolute top-1/2 left-1/4 opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '2s' }}>
+          <Heart className="w-12 h-12 text-rose-400 fill-rose-400" />
+        </div>
       </div>
       
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in-up">
           <div className="inline-block mb-4">
-            <span className="text-4xl">👨‍👩‍👧‍👦</span>
+            <Users className="w-10 h-10 text-pink-500 mx-auto" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
             <span className="gradient-text">Gia đình</span>
           </h2>
           <div className="flex items-center justify-center gap-2">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <span className="text-pink-400 text-2xl">❤️</span>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+        <div className="max-w-5xl mx-auto">
+          <div className={`grid ${hasGroomParents && hasBrideParents ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-12 md:gap-16`}>
             {/* Groom's family */}
-            {(groomFather || groomMother) && (
+            {hasGroomParents && (
               <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <div className="mb-6">
                   <div className="inline-block p-4 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full mb-4">
-                    <span className="text-4xl">👨‍👩‍👦</span>
+                    <Users className="w-10 h-10 text-blue-500" />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
                     <span className="gradient-text">Gia đình Chú Rể</span>
@@ -73,13 +84,13 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
                 <div className="space-y-4 text-lg text-gray-700">
                   {groomFather && (
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-pink-400 text-2xl">👨</span>
+                      <User className="w-6 h-6 text-blue-500" />
                       <p className="font-semibold">{groomFather}</p>
                     </div>
                   )}
                   {groomMother && (
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-pink-400 text-2xl">👩</span>
+                      <UserCheck className="w-6 h-6 text-blue-500" />
                       <p className="font-semibold">{groomMother}</p>
                     </div>
                   )}
@@ -88,11 +99,11 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
             )}
 
             {/* Bride's family */}
-            {(brideFather || brideMother) && (
+            {hasBrideParents && (
               <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                 <div className="mb-6">
                   <div className="inline-block p-4 bg-gradient-to-br from-pink-100 to-rose-50 rounded-full mb-4">
-                    <span className="text-4xl">👨‍👩‍👧</span>
+                    <Users className="w-10 h-10 text-pink-500" />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
                     <span className="gradient-text">Gia đình Cô Dâu</span>
@@ -101,13 +112,13 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
                 <div className="space-y-4 text-lg text-gray-700">
                   {brideFather && (
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-rose-400 text-2xl">👨</span>
+                      <User className="w-6 h-6 text-pink-500" />
                       <p className="font-semibold">{brideFather}</p>
                     </div>
                   )}
                   {brideMother && (
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-rose-400 text-2xl">👩</span>
+                      <UserCheck className="w-6 h-6 text-pink-500" />
                       <p className="font-semibold">{brideMother}</p>
                     </div>
                   )}
@@ -117,11 +128,11 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
           </div>
 
           {/* Connecting line */}
-          {(groomFather || groomMother) && (brideFather || brideMother) && (
+          {hasGroomParents && hasBrideParents && (
             <div className="mt-12 flex items-center justify-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <div className="flex items-center gap-4">
                 <div className="h-px w-20 bg-gradient-to-r from-transparent to-pink-300"></div>
-                <span className="text-4xl opacity-50">💕</span>
+                <Heart className="w-8 h-8 text-pink-400 fill-pink-400 opacity-50" />
                 <div className="h-px w-20 bg-gradient-to-l from-transparent to-pink-300"></div>
               </div>
             </div>

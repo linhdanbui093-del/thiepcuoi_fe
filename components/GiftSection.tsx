@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { Gift, Heart, Wallet, Copy, Check } from 'lucide-react'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
@@ -72,22 +74,28 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
       
       {/* Floating gift elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 right-1/4 text-6xl opacity-5 animate-float" style={{ animationDuration: '7s' }}>🎁</div>
-        <div className="absolute bottom-20 left-1/4 text-6xl opacity-5 animate-float-slow" style={{ animationDuration: '9s', animationDelay: '1s' }}>💝</div>
-        <div className="absolute top-1/2 right-20 text-5xl opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '2s' }}>💰</div>
+        <div className="absolute top-20 right-1/4 opacity-5 animate-float" style={{ animationDuration: '7s' }}>
+          <Gift className="w-16 h-16 text-pink-400" />
+        </div>
+        <div className="absolute bottom-20 left-1/4 opacity-5 animate-float-slow" style={{ animationDuration: '9s', animationDelay: '1s' }}>
+          <Heart className="w-14 h-14 text-rose-400 fill-rose-400" />
+        </div>
+        <div className="absolute top-1/2 right-20 opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '2s' }}>
+          <Wallet className="w-12 h-12 text-pink-500" />
+        </div>
       </div>
       
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in-up">
           <div className="inline-block mb-4">
-            <span className="text-4xl">🎁</span>
+            <Gift className="w-10 h-10 text-pink-500 mx-auto" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
             <span className="gradient-text">Hộp mừng cưới</span>
           </h2>
           <div className="flex items-center justify-center gap-2 mb-4">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <span className="text-pink-400 text-2xl">💝</span>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
           </div>
           <p className="text-center text-gray-700 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">
@@ -99,7 +107,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
           {bankAccounts.groom && (
             <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 transform hover:scale-[1.02] animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
-                <span>👔</span>
+                <Wallet className="w-6 h-6 text-blue-500" />
                 <span>Mừng cưới đến chú rể</span>
               </h3>
               <div className="space-y-4">
@@ -119,9 +127,19 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     </p>
                     <button
                       onClick={() => copyToClipboard(bankAccounts.groom!.accountNumber, 'groom-account')}
-                      className="px-3 py-1 bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors text-sm"
+                      className="px-3 py-1 bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors text-sm flex items-center gap-1"
                     >
-                      {copied === 'groom-account' ? 'Đã copy!' : 'Copy'}
+                      {copied === 'groom-account' ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Đã copy!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4" />
+                          <span>Copy</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -129,10 +147,13 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                   <div className="mt-4">
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">
-                      <img
+                      <Image
                         src={`https://api.ocuadua.com${groomQR}`}
                         alt="QR Code"
-                        className="w-48 h-48 object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
+                        width={192}
+                        height={192}
+                        className="object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
+                        unoptimized
                       />
                     </div>
                   </div>
@@ -144,7 +165,7 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
           {bankAccounts.bride && (
             <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 transform hover:scale-[1.02] animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
-                <span>👗</span>
+                <Wallet className="w-6 h-6 text-pink-500" />
                 <span>Mừng cưới đến cô dâu</span>
               </h3>
               <div className="space-y-4">
@@ -164,9 +185,19 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     </p>
                     <button
                       onClick={() => copyToClipboard(bankAccounts.bride!.accountNumber, 'bride-account')}
-                      className="px-3 py-1 bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors text-sm"
+                      className="px-3 py-1 bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors text-sm flex items-center gap-1"
                     >
-                      {copied === 'bride-account' ? 'Đã copy!' : 'Copy'}
+                      {copied === 'bride-account' ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Đã copy!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4" />
+                          <span>Copy</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -174,10 +205,13 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                   <div className="mt-4">
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">
-                      <img
+                      <Image
                         src={`https://api.ocuadua.com${brideQR}`}
                         alt="QR Code"
-                        className="w-48 h-48 object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
+                        width={192}
+                        height={192}
+                        className="object-contain border-2 border-pink-200 rounded-lg bg-white p-2"
+                        unoptimized
                       />
                     </div>
                   </div>

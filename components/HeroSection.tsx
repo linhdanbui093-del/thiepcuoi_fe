@@ -2,6 +2,7 @@
 
 import { format } from 'date-fns'
 import { vi } from 'date-fns/locale'
+import { Heart, Sparkles } from 'lucide-react'
 
 interface HeroSectionProps {
   wedding: {
@@ -47,11 +48,21 @@ export default function HeroSection({ wedding }: HeroSectionProps) {
       
       {/* Floating hearts decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 text-5xl opacity-20 animate-float" style={{ animationDuration: '4s' }}>💕</div>
-        <div className="absolute top-1/3 right-1/4 text-4xl opacity-20 animate-float-slow" style={{ animationDuration: '6s', animationDelay: '1s' }}>💖</div>
-        <div className="absolute bottom-1/4 left-1/3 text-6xl opacity-20 animate-float" style={{ animationDuration: '5s', animationDelay: '2s' }}>💝</div>
-        <div className="absolute top-1/2 right-1/3 text-4xl opacity-15 animate-float-slow" style={{ animationDuration: '7s', animationDelay: '3s' }}>💗</div>
-        <div className="absolute bottom-1/3 right-1/4 text-5xl opacity-15 animate-float" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>💞</div>
+        <div className="absolute top-1/4 left-1/4 opacity-20 animate-float" style={{ animationDuration: '4s' }}>
+          <Heart className="w-12 h-12 text-pink-400 fill-pink-400" />
+        </div>
+        <div className="absolute top-1/3 right-1/4 opacity-20 animate-float-slow" style={{ animationDuration: '6s', animationDelay: '1s' }}>
+          <Heart className="w-10 h-10 text-rose-400 fill-rose-400" />
+        </div>
+        <div className="absolute bottom-1/4 left-1/3 opacity-20 animate-float" style={{ animationDuration: '5s', animationDelay: '2s' }}>
+          <Heart className="w-14 h-14 text-pink-500 fill-pink-500" />
+        </div>
+        <div className="absolute top-1/2 right-1/3 opacity-15 animate-float-slow" style={{ animationDuration: '7s', animationDelay: '3s' }}>
+          <Heart className="w-8 h-8 text-rose-500 fill-rose-500" />
+        </div>
+        <div className="absolute bottom-1/3 right-1/4 opacity-15 animate-float" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>
+          <Heart className="w-10 h-10 text-pink-400 fill-pink-400" />
+        </div>
       </div>
       
       {/* Sparkle effects */}
@@ -59,7 +70,7 @@ export default function HeroSection({ wedding }: HeroSectionProps) {
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
-            className="absolute text-2xl opacity-30"
+            className="absolute opacity-30"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -67,7 +78,7 @@ export default function HeroSection({ wedding }: HeroSectionProps) {
               animationDelay: `${Math.random() * 2}s`,
             }}
           >
-            ✨
+            <Sparkles className="w-6 h-6 text-rose-300" />
           </div>
         ))}
       </div>
@@ -86,9 +97,9 @@ export default function HeroSection({ wedding }: HeroSectionProps) {
             {formattedDate}
           </div>
           <div className="flex justify-center gap-2 mt-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <span className="text-pink-400">💕</span>
-            <span className="text-pink-400">💖</span>
-            <span className="text-pink-400">💕</span>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
+            <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
           </div>
         </div>
 

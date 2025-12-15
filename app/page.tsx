@@ -12,6 +12,7 @@ import ParentsSection from '@/components/ParentsSection'
 import Guestbook from '@/components/Guestbook'
 import GiftSection from '@/components/GiftSection'
 import StructuredData from '@/components/StructuredData'
+import MusicPlayer from '@/components/MusicPlayer'
 import axios from 'axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
@@ -59,6 +60,7 @@ function HomeContent() {
   return (
     <>
       <StructuredData wedding={wedding} slug={slug} />
+      <MusicPlayer wedding={wedding} />
       <main className="min-h-screen">
         <HeroSection wedding={wedding} />
         <AboutCouple wedding={wedding} />

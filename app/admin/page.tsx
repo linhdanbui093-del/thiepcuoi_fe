@@ -23,7 +23,7 @@ export default function AdminPage() {
   const [weddings, setWeddings] = useState<any[]>([])
   const [selectedWedding, setSelectedWedding] = useState<any>(null)
   const [images, setImages] = useState<any[]>([])
-  const [activeTab, setActiveTab] = useState<'info' | 'images' | 'events' | 'story' | 'bank'>('info')
+  const [activeTab, setActiveTab] = useState<'info' | 'images' | 'events' | 'story' | 'bank' | 'music'>('info')
   
   const { register, handleSubmit, reset, watch, setValue } = useForm<WeddingForm & any>()
 
@@ -33,11 +33,24 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (selectedWedding) {
-      // Convert weddingDate to format compatible with datetime-local input
+      // Convert weddingDate from UTC (stored in DB) to local timezone for datetime-local input
       const formData = {
         ...selectedWedding,
         weddingDate: selectedWedding.weddingDate
-          ? new Date(selectedWedding.weddingDate).toISOString().slice(0, 16)
+          ? (() => {
+              // Parse the UTC date from database
+              const dateFromDB = new Date(selectedWedding.weddingDate)
+              
+              // Get local time components
+              const year = dateFromDB.getFullYear()
+              const month = String(dateFromDB.getMonth() + 1).padStart(2, '0')
+              const day = String(dateFromDB.getDate()).padStart(2, '0')
+              const hours = String(dateFromDB.getHours()).padStart(2, '0')
+              const minutes = String(dateFromDB.getMinutes()).padStart(2, '0')
+              
+              // Format for datetime-local input (YYYY-MM-DDTHH:mm)
+              return `${year}-${month}-${day}T${hours}:${minutes}`
+            })()
           : ''
       }
       reset(formData)
@@ -69,6 +82,16 @@ export default function AdminPage() {
 
   const onSubmit = async (data: any) => {
     try {
+      // Convert datetime-local string to ISO string (UTC) for storage in database
+      if (data.weddingDate) {
+        // datetime-local returns string in format "YYYY-MM-DDTHH:mm" (no timezone info)
+        // new Date() will interpret this as local time, then toISOString() converts to UTC
+        // This is the correct behavior - we want to store the intended local time as UTC
+        const dateFromInput = new Date(data.weddingDate)
+        // Convert to ISO string (UTC) for database storage
+        data.weddingDate = dateFromInput.toISOString()
+      }
+
       if (selectedWedding?._id) {
         await axios.put(`${API_URL}/weddings/${selectedWedding._id}`, data)
         toast.success('Cập nhật thành công!')
@@ -155,7 +178,7 @@ export default function AdminPage() {
             ))}
           </select>
           <a
-            href={`/?slug=${selectedWedding?.slug}`}
+            href={`/${selectedWedding?.slug}`}
             target="_blank"
             className="ml-4 text-pink-500 hover:underline"
           >
@@ -171,7 +194,8 @@ export default function AdminPage() {
               { id: 'images', label: 'Quản lý ảnh' },
               { id: 'events', label: 'Sự kiện' },
               { id: 'story', label: 'Câu chuyện' },
-              { id: 'bank', label: 'Tài khoản ngân hàng' }
+              { id: 'bank', label: 'Tài khoản ngân hàng' },
+              { id: 'music', label: 'Nhạc nền' }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -474,6 +498,136 @@ export default function AdminPage() {
                           </div>
                         )}
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'music' && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-lg p-6">
+                  <h3 className="text-xl font-bold mb-4 text-gray-800">Cài đặt nhạc nền</h3>
+                  <p className="text-sm text-gray-600 mb-6">
+                    Nhạc nền sẽ tự động phát khi người xem tương tác với trang thiệp cưới. Bạn có thể upload file nhạc trực tiếp hoặc sử dụng URL từ các dịch vụ như SoundCloud, YouTube.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <label className="flex items-center gap-3 mb-4">
+                        <input
+                          type="checkbox"
+                          {...register('musicEnabled')}
+                          className="w-5 h-5 text-pink-500 rounded focus:ring-pink-500"
+                        />
+                        <span className="text-sm font-semibold text-gray-700">
+                          Bật nhạc nền
+                        </span>
+                      </label>
+                      <p className="text-xs text-gray-500 ml-8">
+                        Khi bật, nhạc nền sẽ tự động phát sau khi người xem tương tác với trang
+                      </p>
+                    </div>
+
+                    <div className="border-t border-pink-200 pt-6">
+                      <label className="block text-sm font-semibold mb-4 text-gray-700">
+                        Upload file nhạc (MP3, WAV, OGG, M4A, AAC)
+                      </label>
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        onChange={async (e) => {
+                          if (!e.target.files || !e.target.files[0] || !selectedWedding) return
+                          
+                          const file = e.target.files[0]
+                          const formData = new FormData()
+                          formData.append('music', file)
+
+                          const uploadToast = toast.loading('Đang upload file nhạc...')
+                          
+                          try {
+                            const response = await axios.post(`${API_URL}/music/upload`, formData, {
+                              headers: { 'Content-Type': 'multipart/form-data' }
+                            })
+                            
+                            // Set the musicUrl to the uploaded file URL
+                            const musicUrl = response.data.url || `https://api.ocuadua.com${response.data.path}`
+                            setValue('musicUrl', musicUrl)
+                            
+                            toast.success('Upload nhạc thành công!', { id: uploadToast })
+                            e.target.value = '' // Reset file input
+                          } catch (error: any) {
+                            toast.error(error.response?.data?.error || 'Có lỗi xảy ra khi upload nhạc', { id: uploadToast })
+                          }
+                        }}
+                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all cursor-pointer"
+                      />
+                      <p className="text-xs text-gray-500 mt-2">
+                        Kích thước file tối đa: 50MB. Hỗ trợ các định dạng: MP3, WAV, OGG, M4A, AAC
+                      </p>
+                      {watch('musicUrl') && watch('musicUrl').includes('/uploads/music-') && (
+                        <div className="mt-3 flex items-center gap-2">
+                          <span className="text-sm text-green-600">✓ Đã upload file nhạc</span>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const currentUrl = watch('musicUrl')
+                              const filename = currentUrl.split('/').pop()
+                              if (filename && confirm('Bạn có chắc muốn xóa file nhạc này?')) {
+                                try {
+                                  await axios.delete(`${API_URL}/music/${filename}`)
+                                  setValue('musicUrl', '')
+                                  toast.success('Đã xóa file nhạc')
+                                } catch (error: any) {
+                                  toast.error(error.response?.data?.error || 'Có lỗi xảy ra khi xóa file')
+                                }
+                              }
+                            }}
+                            className="text-sm text-red-600 hover:text-red-700 underline"
+                          >
+                            Xóa file
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="border-t border-pink-200 pt-6">
+                      <label className="block text-sm font-semibold mb-2 text-gray-700">
+                        Hoặc nhập URL nhạc nền
+                      </label>
+                      <input
+                        {...register('musicUrl')}
+                        type="url"
+                        placeholder="https://example.com/music.mp3 hoặc https://soundcloud.com/..."
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                      />
+                      <p className="text-xs text-gray-500 mt-2">
+                        Nhập URL của file nhạc (MP3, WAV, OGG) hoặc link từ các dịch vụ chia sẻ nhạc
+                      </p>
+                    </div>
+
+                    {watch('musicUrl') && (
+                      <div className="bg-white rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm font-semibold mb-2 text-gray-700">Xem trước:</p>
+                        <audio
+                          src={watch('musicUrl')}
+                          controls
+                          className="w-full"
+                          preload="metadata"
+                        >
+                          Trình duyệt của bạn không hỗ trợ phát nhạc.
+                        </audio>
+                      </div>
+                    )}
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-sm font-semibold text-blue-800 mb-2">💡 Gợi ý:</p>
+                      <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
+                        <li>Sử dụng file MP3 có chất lượng tốt để đảm bảo trải nghiệm tốt nhất</li>
+                        <li>Nếu upload file, đảm bảo file có kích thước hợp lý (&lt; 50MB) để tải nhanh</li>
+                        <li>Bạn có thể upload file trực tiếp hoặc sử dụng URL từ các dịch vụ như SoundCloud, YouTube</li>
+                        <li>File đã upload sẽ được lưu trên server của bạn</li>
+                      </ul>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,8 @@
 'use client'
 
+import Image from 'next/image'
+import { BookOpen, Heart, Mail } from 'lucide-react'
+
 interface StorySectionProps {
   story: Array<{
     title: string
@@ -23,22 +26,28 @@ export default function StorySection({ story }: StorySectionProps) {
       
       {/* Floating story elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-20 text-6xl opacity-5 animate-float" style={{ animationDuration: '9s' }}>📖</div>
-        <div className="absolute bottom-1/4 right-20 text-6xl opacity-5 animate-float-slow" style={{ animationDuration: '11s', animationDelay: '2s' }}>💌</div>
-        <div className="absolute top-1/2 left-1/4 text-5xl opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '1s' }}>💕</div>
+        <div className="absolute top-1/4 left-20 opacity-5 animate-float" style={{ animationDuration: '9s' }}>
+          <BookOpen className="w-16 h-16 text-pink-400" />
+        </div>
+        <div className="absolute bottom-1/4 right-20 opacity-5 animate-float-slow" style={{ animationDuration: '11s', animationDelay: '2s' }}>
+          <Mail className="w-14 h-14 text-rose-400" />
+        </div>
+        <div className="absolute top-1/2 left-1/4 opacity-5 animate-float" style={{ animationDuration: '8s', animationDelay: '1s' }}>
+          <Heart className="w-12 h-12 text-pink-500 fill-pink-500" />
+        </div>
       </div>
       
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in-up">
           <div className="inline-block mb-4">
-            <span className="text-4xl">💕</span>
+            <Heart className="w-10 h-10 text-pink-500 fill-pink-500 mx-auto" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
             <span className="gradient-text">Chuyện chúng mình</span>
           </h2>
           <div className="flex items-center justify-center gap-2">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <span className="text-pink-400 text-2xl">❤️</span>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
           </div>
         </div>
@@ -52,10 +61,14 @@ export default function StorySection({ story }: StorySectionProps) {
                   {/* Image */}
                   <div className={`${index % 2 === 1 ? 'md:order-2' : ''}`}>
                     <div className="relative group overflow-hidden rounded-2xl shadow-2xl">
-                      <img
+                      <Image
                         src={item.image.startsWith('http') ? item.image : `https://api.ocuadua.com${item.image}`}
                         alt={item.title}
+                        width={600}
+                        height={500}
                         className="w-full h-[400px] md:h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        loading={index < 2 ? 'eager' : 'lazy'}
+                        unoptimized
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-400 to-rose-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>

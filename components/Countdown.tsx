@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Clock, Sparkles } from 'lucide-react'
 
 interface CountdownProps {
   weddingDate: string
@@ -46,14 +47,20 @@ export default function Countdown({ weddingDate }: CountdownProps) {
       
       {/* Floating clock icons */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-1/4 text-5xl opacity-10 animate-float" style={{ animationDuration: '6s' }}>⏰</div>
-        <div className="absolute bottom-20 right-1/4 text-5xl opacity-10 animate-float-slow" style={{ animationDuration: '8s', animationDelay: '1s' }}>⏰</div>
-        <div className="absolute top-1/2 left-1/3 text-4xl opacity-10 animate-float" style={{ animationDuration: '7s', animationDelay: '2s' }}>💫</div>
+        <div className="absolute top-20 left-1/4 opacity-10 animate-float" style={{ animationDuration: '6s' }}>
+          <Clock className="w-12 h-12 text-pink-400" />
+        </div>
+        <div className="absolute bottom-20 right-1/4 opacity-10 animate-float-slow" style={{ animationDuration: '8s', animationDelay: '1s' }}>
+          <Clock className="w-10 h-10 text-rose-400" />
+        </div>
+        <div className="absolute top-1/2 left-1/3 opacity-10 animate-float" style={{ animationDuration: '7s', animationDelay: '2s' }}>
+          <Sparkles className="w-8 h-8 text-pink-300" />
+        </div>
       </div>
       
       <div className="container mx-auto px-4 text-center">
         <div className="mb-4 animate-fade-in-up">
-          <span className="text-4xl">⏰</span>
+          <Clock className="w-10 h-10 text-pink-500 mx-auto" />
         </div>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <span className="gradient-text">The Big Day!</span>

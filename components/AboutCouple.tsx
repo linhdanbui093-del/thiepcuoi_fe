@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import axios from 'axios'
+import { Heart, HeartHandshake } from 'lucide-react'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
@@ -53,16 +55,24 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
       
       {/* Floating decorative elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-20 text-6xl opacity-5 animate-float" style={{ animationDuration: '8s' }}>💑</div>
-        <div className="absolute bottom-20 right-20 text-6xl opacity-5 animate-float-slow" style={{ animationDuration: '10s' }}>💕</div>
-        <div className="absolute top-1/2 left-10 text-4xl opacity-5 animate-float" style={{ animationDuration: '7s', animationDelay: '2s' }}>💖</div>
-        <div className="absolute top-1/3 right-10 text-5xl opacity-5 animate-float-slow" style={{ animationDuration: '9s', animationDelay: '1s' }}>💝</div>
+        <div className="absolute top-20 left-20 opacity-5 animate-float" style={{ animationDuration: '8s' }}>
+          <HeartHandshake className="w-16 h-16 text-pink-400" />
+        </div>
+        <div className="absolute bottom-20 right-20 opacity-5 animate-float-slow" style={{ animationDuration: '10s' }}>
+          <Heart className="w-14 h-14 text-rose-400 fill-rose-400" />
+        </div>
+        <div className="absolute top-1/2 left-10 opacity-5 animate-float" style={{ animationDuration: '7s', animationDelay: '2s' }}>
+          <Heart className="w-10 h-10 text-pink-400 fill-pink-400" />
+        </div>
+        <div className="absolute top-1/3 right-10 opacity-5 animate-float-slow" style={{ animationDuration: '9s', animationDelay: '1s' }}>
+          <Heart className="w-12 h-12 text-rose-500 fill-rose-500" />
+        </div>
       </div>
       
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in-up">
           <div className="inline-block mb-4">
-            <span className="text-4xl">💑</span>
+            <HeartHandshake className="w-10 h-10 text-pink-500 mx-auto" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
             <span className="gradient-text">{wedding.groomName}</span>
@@ -85,10 +95,13 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
               {groomImage ? (
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <img
+                  <Image
                     src={`https://api.ocuadua.com${groomImage}`}
                     alt={wedding.groomName}
+                    width={256}
+                    height={256}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
+                    unoptimized
                   />
                 </div>
               ) : (
@@ -118,10 +131,13 @@ export default function AboutCouple({ wedding }: AboutCoupleProps) {
               {brideImage ? (
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <img
+                  <Image
                     src={`https://api.ocuadua.com${brideImage}`}
                     alt={wedding.brideName}
+                    width={256}
+                    height={256}
                     className="relative w-64 h-64 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-pink-100 transform group-hover:scale-105 transition-transform duration-300"
+                    unoptimized
                   />
                 </div>
               ) : (
