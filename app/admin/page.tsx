@@ -499,7 +499,7 @@ function EventsManager({ register, watch, setValue, selectedWedding }: any) {
   const events = watch('events') || selectedWedding?.events || []
 
   const addEvent = () => {
-    const newEvents = [...events, { title: '', time: '', date: '', location: '', address: '' }]
+    const newEvents = [...events, { title: '', time: '', date: '', location: '', address: '', mapLink: '' }]
     setValue('events', newEvents)
   }
 
@@ -554,6 +554,11 @@ function EventsManager({ register, watch, setValue, selectedWedding }: any) {
             <input
               {...register(`events.${index}.address`)}
               placeholder="Địa chỉ chi tiết"
+              className="px-4 py-2 border rounded-lg md:col-span-2"
+            />
+            <input
+              {...register(`events.${index}.mapLink`)}
+              placeholder="Link Google Maps (tùy chọn)"
               className="px-4 py-2 border rounded-lg md:col-span-2"
             />
           </div>
