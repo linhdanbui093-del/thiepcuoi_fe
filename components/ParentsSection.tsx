@@ -69,28 +69,28 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          <div className={`grid ${hasGroomParents && hasBrideParents ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-12 md:gap-16`}>
+          <div className={`grid ${hasGroomParents && hasBrideParents ? 'grid-cols-2' : 'grid-cols-1'} gap-4 md:gap-12 lg:gap-16`}>
             {/* Groom's family */}
             {hasGroomParents && (
               <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                <div className="mb-6">
-                  <div className="inline-block p-4 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full mb-4">
-                    <Users className="w-10 h-10 text-blue-500" />
+                <div className="mb-3 md:mb-6">
+                  <div className="inline-block p-2 md:p-4 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full mb-2 md:mb-4">
+                    <Users className="w-6 h-6 md:w-10 md:h-10 text-blue-500" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+                  <h3 className="text-base md:text-3xl font-bold text-gray-800 mb-3 md:mb-6">
                     <span className="gradient-text">Gia đình Chú Rể</span>
                   </h3>
                 </div>
-                <div className="space-y-4 text-lg text-gray-700">
+                <div className="space-y-2 md:space-y-4 text-sm md:text-lg text-gray-700">
                   {groomFather && (
-                    <div className="flex items-center justify-center gap-3">
-                      <User className="w-6 h-6 text-blue-500" />
+                    <div className="flex items-center justify-center gap-2 md:gap-3">
+                      <User className="w-4 h-4 md:w-6 md:h-6 text-blue-500" />
                       <p className="font-semibold">{groomFather}</p>
                     </div>
                   )}
                   {groomMother && (
-                    <div className="flex items-center justify-center gap-3">
-                      <UserCheck className="w-6 h-6 text-blue-500" />
+                    <div className="flex items-center justify-center gap-2 md:gap-3">
+                      <UserCheck className="w-4 h-4 md:w-6 md:h-6 text-blue-500" />
                       <p className="font-semibold">{groomMother}</p>
                     </div>
                   )}
@@ -101,24 +101,24 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
             {/* Bride's family */}
             {hasBrideParents && (
               <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                <div className="mb-6">
-                  <div className="inline-block p-4 bg-gradient-to-br from-pink-100 to-rose-50 rounded-full mb-4">
-                    <Users className="w-10 h-10 text-pink-500" />
+                <div className="mb-3 md:mb-6">
+                  <div className="inline-block p-2 md:p-4 bg-gradient-to-br from-pink-100 to-rose-50 rounded-full mb-2 md:mb-4">
+                    <Users className="w-6 h-6 md:w-10 md:h-10 text-pink-500" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+                  <h3 className="text-base md:text-3xl font-bold text-gray-800 mb-3 md:mb-6">
                     <span className="gradient-text">Gia đình Cô Dâu</span>
                   </h3>
                 </div>
-                <div className="space-y-4 text-lg text-gray-700">
+                <div className="space-y-2 md:space-y-4 text-sm md:text-lg text-gray-700">
                   {brideFather && (
-                    <div className="flex items-center justify-center gap-3">
-                      <User className="w-6 h-6 text-pink-500" />
+                    <div className="flex items-center justify-center gap-2 md:gap-3">
+                      <User className="w-4 h-4 md:w-6 md:h-6 text-pink-500" />
                       <p className="font-semibold">{brideFather}</p>
                     </div>
                   )}
                   {brideMother && (
-                    <div className="flex items-center justify-center gap-3">
-                      <UserCheck className="w-6 h-6 text-pink-500" />
+                    <div className="flex items-center justify-center gap-2 md:gap-3">
+                      <UserCheck className="w-4 h-4 md:w-6 md:h-6 text-pink-500" />
                       <p className="font-semibold">{brideMother}</p>
                     </div>
                   )}
@@ -129,11 +129,11 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
 
           {/* Connecting line */}
           {hasGroomParents && hasBrideParents && (
-            <div className="mt-12 flex items-center justify-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <div className="flex items-center gap-4">
-                <div className="h-px w-20 bg-gradient-to-r from-transparent to-pink-300"></div>
-                <Heart className="w-8 h-8 text-pink-400 fill-pink-400 opacity-50" />
-                <div className="h-px w-20 bg-gradient-to-l from-transparent to-pink-300"></div>
+            <div className="mt-6 md:mt-12 flex items-center justify-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              <div className="flex items-center gap-2 md:gap-4">
+                <div className="h-px w-10 md:w-20 bg-gradient-to-r from-transparent to-pink-300"></div>
+                <Heart className="w-5 h-5 md:w-8 md:h-8 text-pink-400 fill-pink-400 opacity-50" />
+                <div className="h-px w-10 md:w-20 bg-gradient-to-l from-transparent to-pink-300"></div>
               </div>
             </div>
           )}
