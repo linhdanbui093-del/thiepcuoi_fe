@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import { Camera, Sparkles, Heart } from 'lucide-react'
 import { X } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
@@ -17,10 +18,42 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+  const [visibleImages, setVisibleImages] = useState<Set<string>>(new Set())
+  const imageRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   useEffect(() => {
     fetchImages()
   }, [weddingId])
+
+  useEffect(() => {
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const imageId = entry.target.getAttribute('data-image-id')
+            if (imageId) {
+              setVisibleImages((prev) => new Set(prev).add(imageId))
+            }
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    )
+
+    imageRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref)
+    })
+
+    return () => {
+      imageRefs.current.forEach((ref) => {
+        if (ref) observer.unobserve(ref)
+      })
+    }
+  }, [images])
 
   const fetchImages = async () => {
     try {
@@ -73,17 +106,19 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
         </div>
         
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 animate-fade-in-up">
+          <div className="text-center mb-12">
             <div className="inline-block mb-4">
-              <Camera className="w-10 h-10 text-pink-500 mx-auto" />
+              <Camera className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-              <span className="gradient-text">Album Hình Cưới</span>
+              <span className="gradient-text">
+                <AnimatedText text="Album Hình Cưới" animationType="bounce" delay={0.4} />
+              </span>
             </h2>
             <div className="flex items-center justify-center gap-2">
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-              <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
+              <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300 animate-text-slide-right" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
+              <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '0.9s', animationDuration: '0.6s' }} />
+              <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300 animate-text-slide-left" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
             </div>
           </div>
           
@@ -91,25 +126,64 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
             {images.map((image, index) => {
               const imageUrl = `https://api.ocuadua.com${image.path}`
               const isLoaded = loadedImages.has(image._id)
+              const isVisible = visibleImages.has(image._id)
+              
+              // Different animation styles for variety
+              const animationStyles = [
+                'animate-image-reveal',
+                'animate-image-zoom',
+                'animate-image-rotate',
+                'animate-image-slide-left',
+                'animate-image-slide-right',
+              ]
+              const animationClass = animationStyles[index % animationStyles.length]
               
               return (
                 <div
                   key={image._id}
-                  className="aspect-square overflow-hidden rounded-xl cursor-pointer group relative shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-scale-in bg-gray-100"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  ref={(el) => {
+                    if (el) imageRefs.current.set(image._id, el)
+                  }}
+                  data-image-id={image._id}
+                  className={`aspect-square overflow-hidden rounded-xl cursor-pointer group relative shadow-lg image-hover-lift image-sparkle-overlay bg-gray-100 ${
+                    isVisible ? animationClass : 'opacity-0'
+                  }`}
+                  style={{ 
+                    animationDelay: `${index * 0.15}s`,
+                    transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+                  }}
                   onClick={() => setSelectedImage(image.path)}
                 >
                   {!isLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
                     </div>
                   )}
+                  
+                  {/* Sparkle effect overlay */}
+                  <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute opacity-60"
+                        style={{
+                          left: `${20 + i * 15}%`,
+                          top: `${20 + (i % 3) * 30}%`,
+                          animation: `sparkle ${1.5 + i * 0.2}s ease-in-out infinite`,
+                          animationDelay: `${i * 0.1}s`,
+                        }}
+                      >
+                        <Sparkles className="w-4 h-4 text-yellow-300" />
+                      </div>
+                    ))}
+                  </div>
+                  
                   <Image
                     src={imageUrl}
                     alt="Wedding photo"
                     width={400}
                     height={400}
-                    className={`w-full h-full object-cover transition-opacity duration-300 group-hover:scale-110 transition-transform duration-300 ${
+                    className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${
                       isLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
                     loading={index < 8 ? 'eager' : 'lazy'}
@@ -117,7 +191,17 @@ export default function PhotoAlbum({ weddingId }: PhotoAlbumProps) {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
                     quality={85}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  {/* Gradient overlay with glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Heart icon on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <Heart className="w-12 h-12 text-white fill-white animate-scale-burst" />
+                  </div>
+                  
+                  {/* Border glow effect */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none animate-image-glow"></div>
                 </div>
               )
             })}

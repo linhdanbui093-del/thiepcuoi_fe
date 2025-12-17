@@ -1,8 +1,10 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import { Heart, Sparkles } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 interface HeroSectionProps {
   wedding: {
@@ -83,38 +85,45 @@ export default function HeroSection({ wedding }: HeroSectionProps) {
         ))}
       </div>
       
-      <div className="relative z-10 text-center px-4 py-20 animate-fade-in-up">
+      <div className="relative z-10 text-center px-4 py-20">
         <div className="mb-8">
-          <p className="text-pink-500 font-semibold tracking-[0.3em] uppercase text-sm mb-6 animate-fade-in">
-            Save the Date
+          <p className="text-pink-500 font-semibold tracking-[0.3em] uppercase text-sm mb-6">
+            <AnimatedText text="Save the Date" animationType="slide-down" delay={0.3} />
           </p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <span className="block text-gray-800 drop-shadow-sm">{wedding.groomName}</span>
-            <span className="text-4xl md:text-5xl lg:text-6xl mx-4 gradient-text font-serif">&</span>
-            <span className="block text-gray-800 drop-shadow-sm">{wedding.brideName}</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8">
+            <span className="block text-gray-800 drop-shadow-sm">
+              <AnimatedText text={wedding.groomName} animationType="slide-right" delay={0.5} className="inline-block" />
+            </span>
+            <span className="text-4xl md:text-5xl lg:text-6xl mx-4 gradient-text font-serif inline-block">
+              <AnimatedText text="&" animationType="zoom" delay={0.8} />
+            </span>
+            <span className="block text-gray-800 drop-shadow-sm">
+              <AnimatedText text={wedding.brideName} animationType="slide-left" delay={1.1} className="inline-block" />
+            </span>
           </h1>
-          <div className="text-xl md:text-2xl lg:text-3xl text-gray-700 font-light mb-2 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            {formattedDate}
+          <div className="text-xl md:text-2xl lg:text-3xl text-gray-700 font-light mb-2">
+            <AnimatedText text={formattedDate} animationType="bounce" delay={1.4} />
           </div>
-          <div className="flex justify-center gap-2 mt-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
-            <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
-            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
+          <div className="flex justify-center gap-2 mt-4" style={{ animationDelay: '1.7s' }}>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '1.7s', animationDuration: '0.6s' }} />
+            <Heart className="w-7 h-7 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '1.9s', animationDuration: '0.6s' }} />
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '2.1s', animationDuration: '0.6s' }} />
           </div>
         </div>
 
         {wedding.saveTheDateText && (
-          <div className="max-w-2xl mx-auto mt-8 text-gray-700 leading-relaxed text-lg animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            {wedding.saveTheDateText}
+          <div className="max-w-2xl mx-auto mt-8 text-gray-700 leading-relaxed text-lg">
+            <AnimatedText text={wedding.saveTheDateText} animationType="fade-scale" delay={2.3} splitBy="word" />
           </div>
         )}
 
-        <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+        <div className="mt-12">
           <a
             href="#about"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full hover:from-pink-600 hover:to-rose-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 font-semibold text-lg glow-pink hover:glow-pink"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full hover:from-pink-600 hover:to-rose-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 font-semibold text-lg glow-pink hover:glow-pink animate-text-bounce"
+            style={{ animationDelay: '2.6s', animationDuration: '1s' }}
           >
-            Xem thêm
+            <AnimatedText text="Xem thêm" animationType="bounce" delay={2.6} />
             <svg className="w-5 h-5 animate-bounce" style={{ animationDuration: '2s' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>

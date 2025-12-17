@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Mail, Heart, PenTool, Send } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
@@ -91,17 +92,19 @@ export default function Guestbook({ weddingId }: GuestbookProps) {
       </div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-12">
           <div className="inline-block mb-4">
-            <PenTool className="w-10 h-10 text-pink-500 mx-auto" />
+            <PenTool className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-            <span className="gradient-text">Sổ Lưu Bút</span>
+            <span className="gradient-text">
+              <AnimatedText text="Sổ Lưu Bút" animationType="bounce" delay={0.4} />
+            </span>
           </h2>
           <div className="flex items-center justify-center gap-2">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <Mail className="w-6 h-6 text-pink-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300 animate-text-slide-right" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
+            <Mail className="w-6 h-6 text-pink-400 animate-text-zoom" style={{ animationDelay: '0.9s', animationDuration: '0.6s' }} />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300 animate-text-slide-left" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
           </div>
         </div>
 

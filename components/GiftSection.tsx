@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Gift, Heart, Wallet, Copy, Check } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.ocuadua.com/api'
 
@@ -25,13 +27,27 @@ interface GiftSectionProps {
 }
 
 export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProps) {
+  const searchParams = useSearchParams()
   const [copied, setCopied] = useState<string | null>(null)
   const [groomQR, setGroomQR] = useState<string | null>(null)
   const [brideQR, setBrideQR] = useState<string | null>(null)
+  
+  // Lấy param từ URL để xác định hiển thị QR của ai
+  const personParam = searchParams?.get('person')?.toLowerCase() // 'groom' hoặc 'bride'
+  const showOnlyGroom = personParam === 'groom' || personParam === 'chure'
+  const showOnlyBride = personParam === 'bride' || personParam === 'codau'
+  const showBoth = !showOnlyGroom && !showOnlyBride // Không có param hoặc param không hợp lệ thì hiển thị cả 2
 
   useEffect(() => {
-    fetchQRCodes()
-  }, [weddingId])
+    // Chỉ fetch QR code của người cần hiển thị
+    if (showOnlyGroom) {
+      fetchQRCode('groom')
+    } else if (showOnlyBride) {
+      fetchQRCode('bride')
+    } else {
+      fetchQRCodes()
+    }
+  }, [weddingId, showOnlyGroom, showOnlyBride])
 
   const fetchQRCodes = async () => {
     try {
@@ -48,6 +64,26 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
       }
     } catch (error) {
       console.error('Error fetching QR codes:', error)
+    }
+  }
+
+  const fetchQRCode = async (type: 'groom' | 'bride') => {
+    try {
+      const endpoint = type === 'groom' 
+        ? `${API_URL}/images/wedding/${weddingId}/qr-groom`
+        : `${API_URL}/images/wedding/${weddingId}/qr-bride`
+      
+      const response = await axios.get(endpoint).catch(() => ({ data: [] }))
+      
+      if (response.data?.length > 0) {
+        if (type === 'groom') {
+          setGroomQR(response.data[0].path)
+        } else {
+          setBrideQR(response.data[0].path)
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching ${type} QR code:`, error)
     }
   }
 
@@ -86,25 +122,28 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
       </div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-12">
           <div className="inline-block mb-4">
-            <Gift className="w-10 h-10 text-pink-500 mx-auto" />
+            <Gift className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-            <span className="gradient-text">Hộp mừng cưới</span>
+            <span className="gradient-text">
+              <AnimatedText text="Hộp mừng cưới" animationType="bounce" delay={0.4} />
+            </span>
           </h2>
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300 animate-text-slide-right" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '0.9s', animationDuration: '0.6s' }} />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300 animate-text-slide-left" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
           </div>
           <p className="text-center text-gray-700 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">
-            Nếu có thể, bạn hãy tới tham dự Đám cưới, chung vui và Mừng cưới trực tiếp cho chúng mình nha ^^. Cảm ơn bạn rất nhiều!
+            <AnimatedText text="Nếu có thể, bạn hãy tới tham dự Đám cưới, chung vui và Mừng cưới trực tiếp cho chúng mình nha ^^. Cảm ơn bạn rất nhiều!" animationType="fade-scale" delay={1.1} splitBy="word" />
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-          {bankAccounts.groom && (
+        <div className={`max-w-4xl mx-auto grid gap-8 ${showBoth ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+          {/* Hiển thị card chú rể nếu: không có param (showBoth) hoặc param là groom */}
+          {bankAccounts.groom && (showBoth || showOnlyGroom) && (
             <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 transform hover:scale-[1.02] animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
                 <Wallet className="w-6 h-6 text-blue-500" />
@@ -143,7 +182,8 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     </button>
                   </div>
                 </div>
-                {groomQR && (
+                {/* Chỉ hiển thị QR nếu: showOnlyGroom hoặc showBoth */}
+                {groomQR && (showOnlyGroom || showBoth) && (
                   <div className="mt-4">
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">
@@ -162,8 +202,9 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
             </div>
           )}
 
-          {bankAccounts.bride && (
-            <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 transform hover:scale-[1.02] animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          {/* Hiển thị card cô dâu nếu: không có param (showBoth) hoặc param là bride */}
+          {bankAccounts.bride && (showBoth || showOnlyBride) && (
+            <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 transform hover:scale-[1.02] animate-fade-in-up" style={{ animationDelay: showOnlyBride ? '0.2s' : '0.4s' }}>
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
                 <Wallet className="w-6 h-6 text-pink-500" />
                 <span>Mừng cưới đến cô dâu</span>
@@ -201,7 +242,8 @@ export default function GiftSection({ weddingId, bankAccounts }: GiftSectionProp
                     </button>
                   </div>
                 </div>
-                {brideQR && (
+                {/* Chỉ hiển thị QR nếu: showOnlyBride hoặc showBoth */}
+                {brideQR && (showOnlyBride || showBoth) && (
                   <div className="mt-4">
                     <label className="text-gray-600 font-semibold block mb-2">Mã QR:</label>
                     <div className="flex justify-center">

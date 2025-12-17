@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense } from 'react'
 import HeroSection from '@/components/HeroSection'
 import AboutCouple from '@/components/AboutCouple'
 import Countdown from '@/components/Countdown'
@@ -12,6 +12,7 @@ import Guestbook from '@/components/Guestbook'
 import GiftSection from '@/components/GiftSection'
 import StructuredData from '@/components/StructuredData'
 import MusicPlayer from '@/components/MusicPlayer'
+import CurtainOpening from '@/components/CurtainOpening'
 
 interface WeddingPageProps {
   wedding: any
@@ -21,6 +22,7 @@ interface WeddingPageProps {
 export default function WeddingPage({ wedding, slug }: WeddingPageProps) {
   return (
     <>
+      <CurtainOpening />
       <StructuredData wedding={wedding} slug={slug} />
       <MusicPlayer wedding={wedding} />
       <main className="min-h-screen">
@@ -32,7 +34,15 @@ export default function WeddingPage({ wedding, slug }: WeddingPageProps) {
         <EventsSection events={wedding.events || []} />
         <ParentsSection parents={wedding.parents} />
         <Guestbook weddingId={wedding._id} />
-        <GiftSection weddingId={wedding._id} bankAccounts={wedding.bankAccounts} />
+        <Suspense fallback={
+          <section className="py-20">
+            <div className="container mx-auto px-4 text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto"></div>
+            </div>
+          </section>
+        }>
+          <GiftSection weddingId={wedding._id} bankAccounts={wedding.bankAccounts} />
+        </Suspense>
       </main>
     </>
   )

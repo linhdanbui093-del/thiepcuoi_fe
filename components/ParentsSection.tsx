@@ -1,6 +1,7 @@
 'use client'
 
 import { Users, Heart, User, UserCheck } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 interface ParentsSectionProps {
   parents?: {
@@ -54,17 +55,19 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
       </div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div className="text-center mb-16">
           <div className="inline-block mb-4">
-            <Users className="w-10 h-10 text-pink-500 mx-auto" />
+            <Users className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-            <span className="gradient-text">Gia đình</span>
+            <span className="gradient-text">
+              <AnimatedText text="Gia đình" animationType="bounce" delay={0.4} />
+            </span>
           </h2>
           <div className="flex items-center justify-center gap-2">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300 animate-text-slide-right" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '0.9s', animationDuration: '0.6s' }} />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300 animate-text-slide-left" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
           </div>
         </div>
 
@@ -78,7 +81,9 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
                     <Users className="w-6 h-6 md:w-10 md:h-10 text-blue-500" />
                   </div>
                   <h3 className="text-base md:text-3xl font-bold text-gray-800 mb-3 md:mb-6">
-                    <span className="gradient-text">Gia đình Chú Rể</span>
+                    <span className="gradient-text">
+                      <AnimatedText text="Gia đình Chú Rể" animationType="slide-right" delay={0.2} />
+                    </span>
                   </h3>
                 </div>
                 <div className="space-y-2 md:space-y-4 text-sm md:text-lg text-gray-700">
@@ -106,7 +111,9 @@ export default function ParentsSection({ parents }: ParentsSectionProps) {
                     <Users className="w-6 h-6 md:w-10 md:h-10 text-pink-500" />
                   </div>
                   <h3 className="text-base md:text-3xl font-bold text-gray-800 mb-3 md:mb-6">
-                    <span className="gradient-text">Gia đình Cô Dâu</span>
+                    <span className="gradient-text">
+                      <AnimatedText text="Gia đình Cô Dâu" animationType="slide-left" delay={0.4} />
+                    </span>
                   </h3>
                 </div>
                 <div className="space-y-2 md:space-y-4 text-sm md:text-lg text-gray-700">

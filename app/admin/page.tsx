@@ -163,27 +163,85 @@ export default function AdminPage() {
         {/* Wedding Selector */}
         <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
           <label className="block text-sm font-semibold mb-2">Chọn thiệp cưới:</label>
-          <select
-            className="w-full md:w-auto px-4 py-2 border rounded-lg"
-            value={selectedWedding?._id || ''}
-            onChange={(e) => {
-              const wedding = weddings.find(w => w._id === e.target.value)
-              setSelectedWedding(wedding)
-            }}
-          >
-            {weddings.map((w) => (
-              <option key={w._id} value={w._id}>
-                {w.groomName} & {w.brideName} ({w.slug})
-              </option>
-            ))}
-          </select>
-          <a
-            href={`/${selectedWedding?.slug}`}
-            target="_blank"
-            className="ml-4 text-pink-500 hover:underline"
-          >
-            Xem thiệp cưới →
-          </a>
+          <div className="flex flex-wrap items-center gap-4">
+            <select
+              className="w-full md:w-auto px-4 py-2 border rounded-lg"
+              value={selectedWedding?._id || ''}
+              onChange={(e) => {
+                const wedding = weddings.find(w => w._id === e.target.value)
+                setSelectedWedding(wedding)
+              }}
+            >
+              {weddings.map((w) => (
+                <option key={w._id} value={w._id}>
+                  {w.groomName} & {w.brideName} ({w.slug})
+                </option>
+              ))}
+            </select>
+            
+            <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+              <a
+                href={`/${selectedWedding?.slug}`}
+                target="_blank"
+                className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold text-sm"
+              >
+                Xem thiệp cưới
+              </a>
+              <a
+                href={`/${selectedWedding?.slug}?person=groom`}
+                target="_blank"
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold text-sm"
+              >
+                Thiệp chú rể
+              </a>
+              <a
+                href={`/${selectedWedding?.slug}?person=bride`}
+                target="_blank"
+                className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors font-semibold text-sm"
+              >
+                Thiệp cô dâu
+              </a>
+            </div>
+          </div>
+          
+          {/* Copy link buttons */}
+          {selectedWedding?.slug && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <p className="text-sm font-semibold mb-2 text-gray-700">Copy link thiệp:</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    const url = `${window.location.origin}/${selectedWedding.slug}`
+                    navigator.clipboard.writeText(url)
+                    toast.success('Đã copy link thiệp cưới!')
+                  }}
+                  className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                >
+                  📋 Copy link chung
+                </button>
+                <button
+                  onClick={() => {
+                    const url = `${window.location.origin}/${selectedWedding.slug}?person=groom`
+                    navigator.clipboard.writeText(url)
+                    toast.success('Đã copy link thiệp chú rể!')
+                  }}
+                  className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium"
+                >
+                  📋 Copy link chú rể
+                </button>
+                <button
+                  onClick={() => {
+                    const url = `${window.location.origin}/${selectedWedding.slug}?person=bride`
+                    navigator.clipboard.writeText(url)
+                    toast.success('Đã copy link thiệp cô dâu!')
+                  }}
+                  className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-lg hover:bg-rose-200 transition-colors text-sm font-medium"
+                >
+                  📋 Copy link cô dâu
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Tabs */}

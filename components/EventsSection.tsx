@@ -1,6 +1,7 @@
 'use client'
 
 import { PartyPopper, Church, Heart, Calendar, MapPin, ExternalLink } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 interface EventsSectionProps {
   events: Array<{
@@ -39,20 +40,22 @@ export default function EventsSection({ events }: EventsSectionProps) {
       </div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-12">
           <div className="inline-block mb-4">
-            <PartyPopper className="w-10 h-10 text-pink-500 mx-auto" />
+            <PartyPopper className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
-            <span className="gradient-text">Sự Kiện Cưới</span>
+            <span className="gradient-text">
+              <AnimatedText text="Sự Kiện Cưới" animationType="bounce" delay={0.4} />
+            </span>
           </h2>
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300"></div>
-            <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300"></div>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-pink-300 animate-text-slide-right" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
+            <Heart className="w-6 h-6 text-pink-400 fill-pink-400 animate-text-zoom" style={{ animationDelay: '0.9s', animationDuration: '0.6s' }} />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-pink-300 animate-text-slide-left" style={{ animationDelay: '0.7s', animationDuration: '0.6s' }}></div>
           </div>
           <p className="text-center text-gray-700 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">
-            Tình yêu đích thực đứng về phía nhau trong những ngày tốt đẹp và sát cánh hơn trong những ngày tồi tệ.
+            <AnimatedText text="Tình yêu đích thực đứng về phía nhau trong những ngày tốt đẹp và sát cánh hơn trong những ngày tồi tệ." animationType="fade-scale" delay={1.1} splitBy="word" />
           </p>
         </div>
 
@@ -65,7 +68,9 @@ export default function EventsSection({ events }: EventsSectionProps) {
             >
               <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
                 <Church className="w-8 h-8 text-pink-500" />
-                <span>{event.title}</span>
+                <span>
+                  <AnimatedText text={event.title} animationType="slide-right" delay={0.2 + index * 0.1} />
+                </span>
               </h3>
               <div className="space-y-4 text-gray-700">
                 <p className="flex items-start">

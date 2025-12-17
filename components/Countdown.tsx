@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Clock, Sparkles } from 'lucide-react'
+import AnimatedText from './AnimatedText'
 
 interface CountdownProps {
   weddingDate: string
@@ -59,11 +60,13 @@ export default function Countdown({ weddingDate }: CountdownProps) {
       </div>
       
       <div className="container mx-auto px-4 text-center">
-        <div className="mb-4 animate-fade-in-up">
-          <Clock className="w-10 h-10 text-pink-500 mx-auto" />
+        <div className="mb-4">
+          <Clock className="w-10 h-10 text-pink-500 mx-auto animate-text-zoom" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }} />
         </div>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <span className="gradient-text">The Big Day!</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12">
+          <span className="gradient-text">
+            <AnimatedText text="The Big Day!" animationType="bounce" delay={0.4} />
+          </span>
         </h2>
         
         <div className="flex justify-center gap-4 md:gap-6 lg:gap-8 flex-wrap">
