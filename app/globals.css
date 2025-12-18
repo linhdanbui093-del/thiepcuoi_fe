@@ -644,3 +644,69 @@ html {
   opacity: 0;
   animation: textSlideInUp 0.6s ease-out forwards;
 }
+
+/* Particle explosion animation */
+@keyframes particleExplode {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--particle-x, 0px), var(--particle-y, 0px)) scale(1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Confetti fall animation */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Heart float animation */
+@keyframes heartFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) scale(1.1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-10px) scale(0.9);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px) scale(1.05);
+    opacity: 0.6;
+  }
+}
+
+/* Star twinkle animation */
+@keyframes starTwinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
