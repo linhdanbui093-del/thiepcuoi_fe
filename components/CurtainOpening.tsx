@@ -136,9 +136,9 @@ export default function CurtainOpening() {
           isOpen ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
         }`}
         style={{
-          background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 25%, #f9a8d4 50%, #f472b6 75%, #ec4899 100%)',
+          background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 25%, #f87171 50%, #ef4444 75%, #dc2626 100%)',
           backgroundSize: '200% 200%',
-          boxShadow: 'inset -30px 0 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(236, 72, 153, 0.5), inset 0 0 80px rgba(244, 114, 182, 0.3)',
+          boxShadow: 'inset -30px 0 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(220, 38, 38, 0.5), inset 0 0 80px rgba(239, 68, 68, 0.3)',
           clipPath: isOpen ? 'polygon(0 0, 0% 0, 0% 100%, 0 100%)' : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
           animation: isOpen ? 'none' : 'gradientShift 8s ease infinite',
         }}
@@ -194,9 +194,9 @@ export default function CurtainOpening() {
           isOpen ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
         }`}
         style={{
-          background: 'linear-gradient(225deg, #ec4899 0%, #f472b6 25%, #f9a8d4 50%, #f472b6 75%, #ec4899 100%)',
+          background: 'linear-gradient(225deg, #dc2626 0%, #ef4444 25%, #f87171 50%, #ef4444 75%, #dc2626 100%)',
           backgroundSize: '200% 200%',
-          boxShadow: 'inset 30px 0 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(236, 72, 153, 0.5), inset 0 0 80px rgba(244, 114, 182, 0.3)',
+          boxShadow: 'inset 30px 0 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(220, 38, 38, 0.5), inset 0 0 80px rgba(239, 68, 68, 0.3)',
           clipPath: isOpen ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
           animation: isOpen ? 'none' : 'gradientShift 8s ease infinite',
         }}
